@@ -5,6 +5,7 @@ namespace Tests\Unit\UseCase\Category;
 use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\UseCase\Category\UpdateCategoryUseCase;
+use Core\UseCase\DTO\Category\CategoryOutputDto;
 use Core\UseCase\DTO\Category\UpdateCategory\UpdateCategoryInputDto;
 use Core\UseCase\DTO\Category\UpdateCategory\UpdateCategoryOutputDto;
 use Mockery;
@@ -14,6 +15,43 @@ use stdClass;
 
 class UpdateCategoryUseCaseUnitTest extends TestCase
 {
+    public function testRenameCategory()
+    {
+        $uuid = Uuid::uuid4()->toString();
+        $name = 'Category Name';
+        $descripton = 'Category Description';
+
+        /**
+         * @var \Mockery\MockInterface|\Mockery\LegacyMockInterface
+         */
+        $this->mockEntity = Mockery::mock(Category::class, [
+            $uuid,
+            $name,
+            $descripton
+        ]);
+        $this->mockEntity->shouldReceive('update');
+
+        /**
+         * @var \Mockery\MockInterface|\Mockery\LegacyMockInterface|CategoryRepositoryInterface
+         */
+        $this->mockRepo = Mockery::mock(stdClass::class, CategoryRepositoryInterface::class);
+        $this->mockRepo->shouldReceive('findById')->andReturn($this->mockEntity);
+        $this->mockRepo->shouldReceive('update')->andReturn($this->mockEntity);
+
+        /**
+         * @var \Mockery\MockInterface|\Mockery\LegacyMockInterface|UpdateCategoryInputDto
+         */
+        $this->mockInput = Mockery::mock(UpdateCategoryInputDto::class, [
+            $uuid,
+            'name updated'
+        ]);
+
+        $useCase = new UpdateCategoryUseCase($this->mockRepo);
+        $response = $useCase->execute($this->mockInput);
+
+        $this->assertInstanceOf(UpdateCategoryOutputDto::class, $response);
+    }
+
     public function testUpdateCategory()
     {
         $uuid = Uuid::uuid4()->toString();
@@ -25,10 +63,7 @@ class UpdateCategoryUseCaseUnitTest extends TestCase
          * @var \Mockery\MockInterface|\Mockery\LegacyMockInterface
          */
         $category = Mockery::mock(Category::class, [ $uuid, $name, $descripton, $isActive ]);
-        $category->shouldReceive('id')->andReturn($uuid);
-        $category->shouldReceive('name')->andReturn($name);
-        $category->shouldReceive('descripton')->andReturn($descripton);
-        $category->shouldReceive('isActive')->andReturn($isActive);
+        $category->shouldReceive('update');
 
         /**
          * @var \Mockery\MockInterface|\Mockery\LegacyMockInterface|CategoryRepositoryInterface

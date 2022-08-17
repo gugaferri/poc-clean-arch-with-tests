@@ -5,7 +5,9 @@ namespace Core\UseCase\DTO\Category\UpdateCategory;
 class UpdateCategoryInputDto
 {
     public function __construct(
-        public string $uuid,
-        public string $name
+        public string $id,
+        public string $name,
+        public string|null $description = null,
+        public bool $isActive = true
     ) {}
 }

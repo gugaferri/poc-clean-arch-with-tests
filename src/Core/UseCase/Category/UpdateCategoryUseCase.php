@@ -15,12 +15,19 @@ class UpdateCategoryUseCase
 
     public function execute(UpdateCategoryInputDto $updateCategoryInputDto): UpdateCategoryOutputDto
     {
-        $this->repository->findById($updateCategoryInputDto->uuid);
-
-        $category = $this->repository->update(
-            new Category($updateCategoryInputDto->uuid, $updateCategoryInputDto->name)
+        $category = $this->repository->findById($updateCategoryInputDto->id);
+        $category->update(
+            $updateCategoryInputDto->name,
+            $updateCategoryInputDto->description ?? $category->description
         );
 
-        return new UpdateCategoryOutputDto($category->id(), $category->name);
+        $category = $this->repository->update($category);
+
+        return new UpdateCategoryOutputDto(
+            $category->id,
+            $category->name,
+            $category->description,
+            $category->isActive
+        );
     }
 }
