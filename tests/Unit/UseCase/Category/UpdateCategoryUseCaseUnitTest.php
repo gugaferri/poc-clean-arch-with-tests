@@ -5,7 +5,6 @@ namespace Tests\Unit\UseCase\Category;
 use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\UseCase\Category\UpdateCategoryUseCase;
-use Core\UseCase\DTO\Category\CategoryOutputDto;
 use Core\UseCase\DTO\Category\UpdateCategory\UpdateCategoryInputDto;
 use Core\UseCase\DTO\Category\UpdateCategory\UpdateCategoryOutputDto;
 use Mockery;
@@ -30,6 +29,9 @@ class UpdateCategoryUseCaseUnitTest extends TestCase
             $descripton
         ]);
         $this->mockEntity->shouldReceive('update');
+        $this->mockEntity->shouldReceive('createdAt')->andReturn(date('Y-m-d H:i:s'));
+
+
 
         /**
          * @var \Mockery\MockInterface|\Mockery\LegacyMockInterface|CategoryRepositoryInterface
@@ -80,6 +82,7 @@ class UpdateCategoryUseCaseUnitTest extends TestCase
          */
         $category = Mockery::mock(Category::class, [ $uuid, $name, $descripton, $isActive ]);
         $category->shouldReceive('update');
+        $category->shouldReceive('createdAt')->andReturn(date('Y-m-d H:i:s'));
 
         /**
          * @var \Mockery\MockInterface|\Mockery\LegacyMockInterface|CategoryRepositoryInterface

@@ -24,10 +24,11 @@ class UpdateCategoryUseCase
         $categoryUpdated = $this->repository->update($category);
 
         return new UpdateCategoryOutputDto(
-            $categoryUpdated->id,
-            $categoryUpdated->name,
-            $categoryUpdated->description,
-            $categoryUpdated->isActive
+            id: $categoryUpdated->id,
+            name: $categoryUpdated->name,
+            description: $categoryUpdated->description,
+            isActive: $categoryUpdated->isActive,
+            created_at: $categoryUpdated->createdAt()
         );
     }
 }

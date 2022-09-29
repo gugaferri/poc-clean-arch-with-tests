@@ -5,8 +5,8 @@ namespace Tests\Unit\UseCase\Category;
 use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\UseCase\Category\CreateCategoryUseCase;
-use Core\UseCase\DTO\Category\CreateCategoryInputDto;
-use Core\UseCase\DTO\Category\CreateCategoryOutputDto;
+use Core\UseCase\DTO\Category\CreateCategory\CreateCategoryInputDto;
+use Core\UseCase\DTO\Category\CreateCategory\CreateCategoryOutputDto;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -21,6 +21,7 @@ class CreateCategoryUseCaseUnitTest extends TestCase
 
         $this->mockCategory = Mockery::mock(Category::class, [$uuid, $categoryName]);
         $this->mockCategory->shouldReceive('id')->andReturn($uuid);
+        $this->mockCategory->shouldReceive('createdAt')->andReturn(date('Y-m-d H:i:s'));
 
         $this->mockCategoryRepository = Mockery::mock(stdClass::class, CategoryRepositoryInterface::class);
         $this->mockCategoryRepository->shouldReceive('insert')->andReturn($this->mockCategory);
